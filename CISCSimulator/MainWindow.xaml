@@ -6,7 +6,29 @@
         xmlns:local="clr-namespace:CISCSimulator"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition MaxHeight="20"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <Menu Grid.Row="0">
+            <MenuItem Header="Open File" Click="OpenFile"/>
+        </Menu>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="60"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <TextBox Name="codeTextBox" Grid.Column="0"/>
+            <Button Grid.Column="1" Height="40" Content="Parse" Click="ParseCode"/>
+            <!--<TextBox Name="tokensTextBox" Grid.Column="2" AcceptsReturn="true"/>-->
+            <ListView Name="tokensListView" Grid.Column="2"/>
+        </Grid>
         
     </Grid>
 </Window>
