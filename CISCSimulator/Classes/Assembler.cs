@@ -4,48 +4,36 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualBasic.FileIO;
+using System.IO;
 
 namespace CISCSimulator
 { 
     class Assembler
     {
+        private char commentSymbol = ';';
         private readonly Dictionary<string, int> tokens = new Dictionary<string, int>
         {
             {"ADD", 0000},
         };
 
-        private readonly string[] delimiters = { ":", ",", " ", "(", ")" };
+        private readonly char[] symbols = { ':', ',', ' ', '(', ')' };
 
-        List<string> foundTokens = new List<string>();
+        private List<string> foundTokens = new List<string>();
 
-        TextFieldParser parser;
-
-
-        public List<string> Parse(string filepath)
+        public List<string> ParseCode(string sourceCode)
         {
             int lineCounter = 0;
+            foundTokens.Clear();
 
-            parser = new TextFieldParser(filepath)
+            List<string> sourceCodeWithoutComments = RemoveComments(sourceCode);
+
+            foreach (string line in sourceCodeWithoutComments)
             {
-                TextFieldType = FieldType.Delimited,
-                Delimiters = delimiters
-            };
-
-            while (!parser.EndOfData)
-            {
-                string[] lineTokens = parser.ReadFields();
-
-                foreach (string token in lineTokens)
-                {
-                    if (!token.Equals(""))
-                    {
-                        foundTokens.Add(token);
-                    }
-                }
+                List<string> splitLine = line.Split(symbols).ToList();
+                splitLine.RemoveAll(element => string.IsNullOrEmpty(element));
+                foundTokens.AddRange(splitLine);
                 lineCounter++;
             }
-
-            parser.Close();
 
             if (lineCounter == 0)
             {
@@ -56,30 +44,24 @@ namespace CISCSimulator
             return foundTokens;
         }
 
-        public string[] RemoveComments(string filepath)
+        private List<string> RemoveComments(string sourceCode)
         {
-            List<string> codeWithoutComments = new List<string>();
-            string[] commentDelimiters = { ";" };
-            parser = new TextFieldParser(filepath)
+            List<string> sourceCodeLines = new List<string>();
+            using (StringReader stringReader = new StringReader(sourceCode))
             {
-                TextFieldType = FieldType.Delimited,
-                Delimiters = commentDelimiters
-            };
-
-            while (!parser.EndOfData)
-            {
-                string[] elements = parser.ReadFields();
-
-                foreach (string element in elements)
+                string line;
+                while ((line = stringReader.ReadLine()) != null)
                 {
-                    if (!element.Equals("") && Array.IndexOf(elements, element) != 1) //Daca are index 1 inseamna ca e dupa ';'
-                    {
-                        codeWithoutComments.Add(element);
-                    }
+                    sourceCodeLines.Add(line);
                 }
             }
 
-            return codeWithoutComments.ToArray<string>();
+            for (int i = 0; i < sourceCodeLines.Count; i++)
+            {
+                string[] lineParts = sourceCodeLines[i].Split(commentSymbol);
+                sourceCodeLines[i] = lineParts[0];
+            }
+            return sourceCodeLines;
         }
     }
 }

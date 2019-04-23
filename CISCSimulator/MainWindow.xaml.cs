@@ -20,6 +20,7 @@ namespace CISCSimulator
     public partial class MainWindow : Window
     {
         Assembler assembler;
+        string sourceCode;
         string filepath;
 
         public MainWindow()
@@ -34,18 +35,15 @@ namespace CISCSimulator
             if (openFileDialog.ShowDialog() == true)
             {
                 filepath = openFileDialog.FileName;
-                string text = File.ReadAllText(filepath);
-                codeTextBox.Text = text;
+                sourceCode = File.ReadAllText(filepath);
+                codeTextBox.Text = sourceCode;
             }
         }
 
         private void ParseCode(object sender, RoutedEventArgs e)
         {
             tokensListView.Items.Clear();
-            string[] textNoComments = assembler.RemoveComments(filepath);
-            string newPath = string.Format("{0}NoComments.asm", filepath.Remove(filepath.Length - 4, 4));
-            File.WriteAllLines(newPath, textNoComments);
-            List<string> foundTokens = assembler.Parse(newPath);
+            List<string> foundTokens = assembler.ParseCode(sourceCode);
 
             foreach (string token in foundTokens)
             {
