@@ -21,7 +21,6 @@ namespace CISCSimulator
     {
         Assembler assembler;
         string sourceCode;
-        string filepath;
 
         public MainWindow()
         {
@@ -34,7 +33,7 @@ namespace CISCSimulator
             OpenFileDialog openFileDialog = new OpenFileDialog();
             if (openFileDialog.ShowDialog() == true)
             {
-                filepath = openFileDialog.FileName;
+                string filepath = openFileDialog.FileName;
                 sourceCode = File.ReadAllText(filepath);
                 codeTextBox.Text = sourceCode;
             }
@@ -48,6 +47,21 @@ namespace CISCSimulator
             foreach (string token in foundTokens)
             {
                 tokensListView.Items.Add(token);
+            }
+        }
+
+        private void InitializeAssembler(object sender, RoutedEventArgs e)
+        {
+            parseCodeButton.IsEnabled = true;
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Multiselect = true
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string[] filepaths = openFileDialog.FileNames;
+                assembler.ParseArchitecture(filepaths);
             }
         }
     }

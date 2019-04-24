@@ -1,0 +1,4 @@
+Immediate 0
+Direct    1
+Indirect  3
+Indexed   2

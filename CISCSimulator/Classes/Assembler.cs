@@ -10,12 +10,9 @@ namespace CISCSimulator
 { 
     class Assembler
     {
-        private char commentSymbol = ';';
-        private readonly Dictionary<string, int> tokens = new Dictionary<string, int>
-        {
-            {"ADD", 0000},
-        };
+        private Dictionary<string, int>[] architecture;
 
+        private readonly char commentSymbol = ';';
         private readonly char[] symbols = { ':', ',', ' ', '(', ')' };
 
         private List<string> foundTokens = new List<string>();
@@ -62,6 +59,40 @@ namespace CISCSimulator
                 sourceCodeLines[i] = lineParts[0];
             }
             return sourceCodeLines;
+        }
+
+        public void ParseArchitecture(string[] filepaths)
+        {
+            string instructionsFile = File.ReadAllText(filepaths[Constants.INSTRUCTIONS]);
+            string addressingModesFile = File.ReadAllText(filepaths[Constants.ADDRESSING_MODES]);
+            string generalRegistersFile = File.ReadAllText(filepaths[Constants.REGISTERS]);
+
+            Dictionary<string, int> instructions = ParseInstructions(instructionsFile);
+            Dictionary<string, int> addressingModes = ParseAddressingModes(addressingModesFile);
+            Dictionary<string, int> generalRegisters = ParseGeneralRegisters(generalRegistersFile);
+
+            architecture = new Dictionary<string, int>[]
+            {
+                instructions, addressingModes, generalRegisters
+            };
+        }
+
+        private Dictionary<string, int> ParseInstructions(string instructionsFile)
+        {
+            Dictionary<string, int> instructions = new Dictionary<string, int>();
+            return instructions;
+        }
+
+        private Dictionary<string, int> ParseAddressingModes(string addressingModesFile)
+        {
+            Dictionary<string, int> addressingModes = new Dictionary<string, int>();
+            return addressingModes;
+        }
+
+        private Dictionary<string, int> ParseGeneralRegisters(string generalRegistersfile)
+        {
+            Dictionary<string, int> generalRegisters = new Dictionary<string, int>();
+            return generalRegisters;
         }
     }
 }
