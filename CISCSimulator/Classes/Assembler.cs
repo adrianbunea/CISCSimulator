@@ -10,7 +10,7 @@ namespace CISCSimulator
 { 
     class Assembler
     {
-        private Dictionary<string, int>[] architecture;
+        private Dictionary<string, int>[] architecture = new Dictionary<string, int>[3];
 
         private readonly char commentSymbol = ';';
         private readonly char[] symbols = { ':', ',', ' ', '(', ')' };
@@ -19,33 +19,33 @@ namespace CISCSimulator
 
         public List<string> ParseCode(string sourceCode)
         {
-            int lineCounter = 0;
             foundTokens.Clear();
-
             List<string> sourceCodeLines = ReadLinesFromFile(sourceCode);
             RemoveComments(ref sourceCodeLines);
-            lineCounter = FindTokens(lineCounter, sourceCodeLines);
-
-            if (lineCounter == 0)
-            {
-                Exception exception = new Exception("The ASM file is empty!");
-                throw exception;
-            }
+            FindTokens(sourceCodeLines);
 
             return foundTokens;
         }
 
-        private int FindTokens(int lineCounter, List<string> sourceCodeLines)
+        private void FindTokens(List<string> sourceCodeLines)
         {
             foreach (string line in sourceCodeLines)
             {
                 List<string> splitLine = line.Split(symbols).ToList();
                 splitLine.RemoveAll(element => string.IsNullOrEmpty(element));
                 foundTokens.AddRange(splitLine);
-                lineCounter++;
             }
 
-            return lineCounter;
+            CheckIfFileWasEmpty();
+        }
+
+        private void CheckIfFileWasEmpty()
+        {
+            if (foundTokens.Count == 0)
+            {
+                Exception exception = new Exception("The ASM file is empty!");
+                throw exception;
+            }
         }
 
         private List<string> RemoveComments(ref List<string> sourceCodeLines)
@@ -60,25 +60,26 @@ namespace CISCSimulator
 
         public void ParseArchitecture(string[] filepaths)
         {
-            string instructionsFile = File.ReadAllText(filepaths[Constants.INSTRUCTIONS]);
-            string addressingModesFile = File.ReadAllText(filepaths[Constants.ADDRESSING_MODES]);
-            string generalRegistersFile = File.ReadAllText(filepaths[Constants.REGISTERS]);
-
-            Dictionary<string, int> instructions = ParseInstructions(instructionsFile);
-            Dictionary<string, int> addressingModes = ParseAddressingModes(addressingModesFile);
-            Dictionary<string, int> generalRegisters = ParseGeneralRegisters(generalRegistersFile);
-
-            architecture = new Dictionary<string, int>[]
-            {
-                instructions, addressingModes, generalRegisters
-            };
+            string[] architectureFiles = ReadArchitectureFiles(filepaths);
+            ParseInstructions(architectureFiles[Constants.INSTRUCTIONS]);
+            ParseAddressingModes(architectureFiles[Constants.ADDRESSING_MODES]);
+            ParseGeneralRegisters(architectureFiles[Constants.REGISTERS]);
         }
 
-        private Dictionary<string, int> ParseInstructions(string instructionsFile)
+        private static string[] ReadArchitectureFiles(string[] filepaths)
+        {
+            string[] architectureFiles = new string[3];
+            architectureFiles[Constants.INSTRUCTIONS] = File.ReadAllText(filepaths[Constants.INSTRUCTIONS]);
+            architectureFiles[Constants.ADDRESSING_MODES] = File.ReadAllText(filepaths[Constants.ADDRESSING_MODES]);
+            architectureFiles[Constants.REGISTERS] = File.ReadAllText(filepaths[Constants.REGISTERS]);
+            return architectureFiles;
+        }
+
+        private void ParseInstructions(string instructionsFile)
         {
             List<string> instructionLines = ReadLinesFromFile(instructionsFile);
             Dictionary<string, int> instructions = CreateInstructions(instructionLines);
-            return instructions;
+            architecture[Constants.INSTRUCTIONS] = instructions;
         }
 
         private static List<string> ReadLinesFromFile(string file)

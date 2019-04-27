@@ -101,6 +101,7 @@
     <Resource Include="Architecture Files\Instructiuni.txt" />
     <Resource Include="Architecture Files\ModuriAdresare.txt" />
     <Resource Include="Architecture Files\RegistriiGenerali.txt" />
+    <Content Include="Assembly Code Files\EmptyFile.asm" />
     <Content Include="Assembly Code Files\Program.asm" />
   </ItemGroup>
   <ItemGroup />
