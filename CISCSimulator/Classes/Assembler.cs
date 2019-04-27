@@ -79,8 +79,52 @@ namespace CISCSimulator
 
         private Dictionary<string, int> ParseInstructions(string instructionsFile)
         {
-            Dictionary<string, int> instructions = new Dictionary<string, int>();
+            List<string> instructionLines = ReadLinesFromFile(instructionsFile);
+            Dictionary<string, int> instructions = CreateInstructions(instructionLines);
             return instructions;
+        }
+
+        private static List<string> ReadLinesFromFile(string instructionsFile)
+        {
+            List<string> instructionLines = new List<string>();
+
+            using (StringReader stringReader = new StringReader(instructionsFile))
+            {
+                string line;
+                while ((line = stringReader.ReadLine()) != null)
+                {
+                    instructionLines.Add(line);
+                }
+            }
+
+            return instructionLines;
+        }
+
+        private Dictionary<string, int> CreateInstructions(List<string> instructionLines)
+        {
+            Dictionary<string, int> instructions = new Dictionary<string, int>();
+            for (int i = 0; i < instructionLines.Count; i++)
+            {
+                List<string> splitInstructionLine = instructionLines[i].Split(' ').ToList();
+                RemoveEmptyElements(ref splitInstructionLine);
+                instructions.Add(InstructionName(splitInstructionLine), InstructionCodification(splitInstructionLine));
+            }
+            return instructions;
+        }
+
+        private int InstructionCodification(List<string> splitInstructionLine)
+        {
+            return int.Parse(splitInstructionLine[1].Trim(), System.Globalization.NumberStyles.HexNumber);
+        }
+
+        private string InstructionName(List<string> splitInstructionLine)
+        {
+            return splitInstructionLine[0].Trim();
+        }
+
+        private void RemoveEmptyElements(ref List<string> splitInstructionLine)
+        {
+            splitInstructionLine.RemoveAll(element => string.IsNullOrEmpty(element) || element == "\t");
         }
 
         private Dictionary<string, int> ParseAddressingModes(string addressingModesFile)
