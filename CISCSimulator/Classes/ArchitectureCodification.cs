@@ -7,25 +7,30 @@ using System.Threading.Tasks;
 
 namespace CISCSimulator
 {
-    class ProcessorArchitectureCodifications
+    public class ArchitectureCodification
     {
-        Dictionary<string, int> instructionSetCodifications;
-        Dictionary<string, int> addressingModesCodifications;
-        Dictionary<string, int> generalRegistersCodifications;
+        private readonly int INSTRUCTIONS = 0;
+        private readonly int ADDRESSING_MODES = 1;
+        private readonly int GENERAL_REGISTERS = 2;
+
+        public Dictionary<string, int> instructionSetCodifications;
+        public Dictionary<string, int> addressingModesCodifications;
+        public Dictionary<string, int> generalRegistersCodifications;
+
         public void ParseArchitecture(string[] filepaths)
         {
             string[] architectureFiles = ReadArchitectureFiles(filepaths);
-            ParseInstructions(architectureFiles[Constants.INSTRUCTIONS]);
-            ParseAddressingModes(architectureFiles[Constants.ADDRESSING_MODES]);
-            ParseGeneralRegisters(architectureFiles[Constants.REGISTERS]);
+            ParseInstructions(architectureFiles[INSTRUCTIONS]);
+            ParseAddressingModes(architectureFiles[ADDRESSING_MODES]);
+            ParseGeneralRegisters(architectureFiles[GENERAL_REGISTERS]);
         }
 
         private string[] ReadArchitectureFiles(string[] filepaths)
         {
             string[] architectureFiles = new string[3];
-            architectureFiles[Constants.INSTRUCTIONS] = File.ReadAllText(filepaths[Constants.INSTRUCTIONS]);
-            architectureFiles[Constants.ADDRESSING_MODES] = File.ReadAllText(filepaths[Constants.ADDRESSING_MODES]);
-            architectureFiles[Constants.REGISTERS] = File.ReadAllText(filepaths[Constants.REGISTERS]);
+            architectureFiles[INSTRUCTIONS] = File.ReadAllText(filepaths[INSTRUCTIONS]);
+            architectureFiles[ADDRESSING_MODES] = File.ReadAllText(filepaths[ADDRESSING_MODES]);
+            architectureFiles[GENERAL_REGISTERS] = File.ReadAllText(filepaths[GENERAL_REGISTERS]);
             return architectureFiles;
         }
 
@@ -33,7 +38,7 @@ namespace CISCSimulator
         {
             List<string> instructionLines = Helper.ReadLinesFromFile(instructionsFile);
             Dictionary<string, int> instructions = CreateInstructions(instructionLines);
-            architecture[Constants.INSTRUCTIONS] = instructions;
+            instructionSetCodifications = instructions;
         }
 
         private Dictionary<string, int> CreateInstructions(List<string> instructionLines)

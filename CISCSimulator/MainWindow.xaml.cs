@@ -61,7 +61,7 @@ namespace CISCSimulator
             if (openFileDialog.ShowDialog() == true)
             {
                 string[] filepaths = openFileDialog.FileNames;
-                assembler.ParseArchitecture(filepaths);
+                assembler.InitializeArchitecture(filepaths);
             }
         }
     }
