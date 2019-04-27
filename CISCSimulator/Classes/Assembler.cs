@@ -22,15 +22,9 @@ namespace CISCSimulator
             int lineCounter = 0;
             foundTokens.Clear();
 
-            List<string> sourceCodeWithoutComments = RemoveComments(sourceCode);
-
-            foreach (string line in sourceCodeWithoutComments)
-            {
-                List<string> splitLine = line.Split(symbols).ToList();
-                splitLine.RemoveAll(element => string.IsNullOrEmpty(element));
-                foundTokens.AddRange(splitLine);
-                lineCounter++;
-            }
+            List<string> sourceCodeLines = ReadLinesFromFile(sourceCode);
+            RemoveComments(ref sourceCodeLines);
+            lineCounter = FindTokens(lineCounter, sourceCodeLines);
 
             if (lineCounter == 0)
             {
@@ -41,18 +35,21 @@ namespace CISCSimulator
             return foundTokens;
         }
 
-        private List<string> RemoveComments(string sourceCode)
+        private int FindTokens(int lineCounter, List<string> sourceCodeLines)
         {
-            List<string> sourceCodeLines = new List<string>();
-            using (StringReader stringReader = new StringReader(sourceCode))
+            foreach (string line in sourceCodeLines)
             {
-                string line;
-                while ((line = stringReader.ReadLine()) != null)
-                {
-                    sourceCodeLines.Add(line);
-                }
+                List<string> splitLine = line.Split(symbols).ToList();
+                splitLine.RemoveAll(element => string.IsNullOrEmpty(element));
+                foundTokens.AddRange(splitLine);
+                lineCounter++;
             }
 
+            return lineCounter;
+        }
+
+        private List<string> RemoveComments(ref List<string> sourceCodeLines)
+        {
             for (int i = 0; i < sourceCodeLines.Count; i++)
             {
                 string[] lineParts = sourceCodeLines[i].Split(commentSymbol);
@@ -84,20 +81,20 @@ namespace CISCSimulator
             return instructions;
         }
 
-        private static List<string> ReadLinesFromFile(string instructionsFile)
+        private static List<string> ReadLinesFromFile(string file)
         {
-            List<string> instructionLines = new List<string>();
+            List<string> lines = new List<string>();
 
-            using (StringReader stringReader = new StringReader(instructionsFile))
+            using (StringReader stringReader = new StringReader(file))
             {
                 string line;
                 while ((line = stringReader.ReadLine()) != null)
                 {
-                    instructionLines.Add(line);
+                    lines.Add(line);
                 }
             }
 
-            return instructionLines;
+            return lines;
         }
 
         private Dictionary<string, int> CreateInstructions(List<string> instructionLines)
