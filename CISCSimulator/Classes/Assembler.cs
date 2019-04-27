@@ -9,7 +9,7 @@ namespace CISCSimulator
 {
     class Assembler
     {
-        private ArchitectureCodification architecture;
+        private ArchitectureCodification architectureCodification;
 
         private readonly char commentSymbol = ';';
         private readonly char[] symbols = { ':', ',', ' ', '(', ')' };
@@ -59,7 +59,7 @@ namespace CISCSimulator
 
         public void InitializeArchitecture(string[] filepaths)
         {
-            architecture.ParseArchitecture(filepaths);
+            architectureCodification.ParseArchitecture(filepaths);
         }
     }
 }
