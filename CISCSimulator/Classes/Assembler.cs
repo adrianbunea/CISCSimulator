@@ -47,19 +47,17 @@ namespace CISCSimulator
         {
             if (foundTokens.Count == 0)
             {
-                Exception exception = new Exception("The ASM file is empty!");
-                throw exception;
+                throw new Exception("The ASM file is empty!");
             }
         }
 
-        private List<string> RemoveComments(ref List<string> sourceCodeLines)
+        private void RemoveComments(ref List<string> sourceCodeLines)
         {
             for (int i = 0; i < sourceCodeLines.Count; i++)
             {
                 string[] lineParts = sourceCodeLines[i].Split(commentSymbol);
                 sourceCodeLines[i] = lineParts[0];
             }
-            return sourceCodeLines;
         }
 
         public void InitializeArchitecture(string[] filepaths)

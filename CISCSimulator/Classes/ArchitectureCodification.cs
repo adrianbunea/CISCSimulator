@@ -23,21 +23,6 @@ namespace CISCSimulator
             instructionSetCodifications = new InstructionSetCodification(architectureCodificationFiles[INSTRUCTIONS]);
             addressingModesCodifications = new AddressingModesCodification(architectureCodificationFiles[ADDRESSING_MODES]);
             generalRegistersCodifications = new GeneralRegistersCodification(architectureCodificationFiles[GENERAL_REGISTERS]);
-
-            foreach (KeyValuePair<string, int> codification in instructionSetCodifications.codifications)
-            {
-                Console.WriteLine(codification);
-            }
-
-            foreach (KeyValuePair<string, int> codification in addressingModesCodifications.codifications)
-            {
-                Console.WriteLine(codification);
-            }
-
-            foreach (KeyValuePair<string, int> codification in generalRegistersCodifications.codifications)
-            {
-                Console.WriteLine(codification);
-            }
         }
 
         private string[] ReadArchitectureCodificationFiles(string[] filepaths)
