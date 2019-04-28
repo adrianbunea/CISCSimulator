@@ -6,10 +6,14 @@ namespace CISCSimulator
     public abstract class ArchitectureCodificationComponent
     {
         public Dictionary<string, int> codifications;
+
+        public ArchitectureCodificationComponent()
+        {
+            codifications = new Dictionary<string, int>();
+        }
         public abstract void Parse(string architectureCodificationFile);
         protected void CreateCodifications(List<string> architectureCodificationLines)
         {
-            Dictionary<string, int> codifications = new Dictionary<string, int>();
             for (int i = 0; i < architectureCodificationLines.Count; i++)
             {
                 List<string> splitCodificationLine = architectureCodificationLines[i].Split(' ').ToList();
@@ -41,6 +45,11 @@ namespace CISCSimulator
             List<string> instructionLines = Helper.ReadLinesFromFile(instructionsCodificationFile);
             CreateCodifications(instructionLines);
         }
+
+        public InstructionSetCodification(string instructionsCodificationFile)
+        {
+            Parse(instructionsCodificationFile);
+        }
     }
 
     public class AddressingModesCodification : ArchitectureCodificationComponent
@@ -50,6 +59,11 @@ namespace CISCSimulator
             List<string> addressingModesLines = Helper.ReadLinesFromFile(addressingModesCodificationFile);
             CreateCodifications(addressingModesLines);
         }
+
+        public AddressingModesCodification(string addressingModesCodificationFile)
+        {
+            Parse(addressingModesCodificationFile);
+        }
     }
 
     public class GeneralRegistersCodification : ArchitectureCodificationComponent
@@ -58,6 +72,11 @@ namespace CISCSimulator
         {
             List<string> generalRegistersLines = Helper.ReadLinesFromFile(generalRegistersCodificationFile);
             CreateCodifications(generalRegistersLines);
+        }
+
+        public GeneralRegistersCodification(string generalRegistersCodificationFile)
+        {
+            Parse(generalRegistersCodificationFile);
         }
     }
 }

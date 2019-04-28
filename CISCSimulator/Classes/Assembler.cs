@@ -59,6 +59,7 @@ namespace CISCSimulator
 
         public void InitializeArchitecture(string[] filepaths)
         {
+            architectureCodification = new ArchitectureCodification();
             architectureCodification.ParseArchitecture(filepaths);
         }
     }

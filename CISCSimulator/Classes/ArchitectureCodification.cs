@@ -20,9 +20,9 @@ namespace CISCSimulator
         public void ParseArchitecture(string[] filepaths)
         {
             string[] architectureCodificationFiles = ReadArchitectureCodificationFiles(filepaths);
-            instructionSetCodifications.Parse(architectureCodificationFiles[INSTRUCTIONS]);
-            addressingModesCodifications.Parse(architectureCodificationFiles[ADDRESSING_MODES]);
-            generalRegistersCodifications.Parse(architectureCodificationFiles[GENERAL_REGISTERS]);
+            instructionSetCodifications = new InstructionSetCodification(architectureCodificationFiles[INSTRUCTIONS]);
+            addressingModesCodifications = new AddressingModesCodification(architectureCodificationFiles[ADDRESSING_MODES]);
+            generalRegistersCodifications = new GeneralRegistersCodification(architectureCodificationFiles[GENERAL_REGISTERS]);
         }
 
         private string[] ReadArchitectureCodificationFiles(string[] filepaths)
