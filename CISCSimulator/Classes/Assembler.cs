@@ -30,12 +30,17 @@ namespace CISCSimulator
         {
             foreach (string line in sourceCodeLines)
             {
-                List<string> splitLine = line.Split(symbols).ToList();
-                splitLine.RemoveAll(element => string.IsNullOrEmpty(element));
+                List<string> splitLine = SplitSourceCodeLine(line);
+                Helper.RemoveEmptyParts(ref splitLine);
                 foundTokens.AddRange(splitLine);
             }
 
             CheckIfFileWasEmpty();
+        }
+
+        private List<string> SplitSourceCodeLine(string line)
+        {
+            return line.Split(symbols).ToList();
         }
 
         private void CheckIfFileWasEmpty()

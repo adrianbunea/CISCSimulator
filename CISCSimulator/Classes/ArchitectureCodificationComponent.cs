@@ -17,14 +17,9 @@ namespace CISCSimulator
             for (int i = 0; i < architectureCodificationLines.Count; i++)
             {
                 List<string> splitCodificationLine = architectureCodificationLines[i].Split(' ').ToList();
-                RemoveEmptyElements(ref splitCodificationLine);
+                Helper.RemoveEmptyParts(ref splitCodificationLine);
                 codifications.Add(Mnemonic(splitCodificationLine), Codification(splitCodificationLine));
             }
-        }
-
-        private void RemoveEmptyElements(ref List<string> splitCodificationLine)
-        {
-            splitCodificationLine.RemoveAll(element => string.IsNullOrEmpty(element) || element == "\t");
         }
 
         private int Codification(List<string> splitCodificationLine)

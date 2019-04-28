@@ -22,5 +22,11 @@ namespace CISCSimulator
             }
             return lines;
         }
+
+
+        public static void RemoveEmptyParts(ref List<string> splitLine)
+        {
+            splitLine.RemoveAll(element => string.IsNullOrEmpty(element) || element == "\t");
+        }
     }
 }
