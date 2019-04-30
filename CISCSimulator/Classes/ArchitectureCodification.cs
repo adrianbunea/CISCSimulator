@@ -13,16 +13,21 @@ namespace CISCSimulator
         private readonly int ADDRESSING_MODES = 1;
         private readonly int GENERAL_REGISTERS = 2;
 
-        InstructionSetCodification instructionSetCodifications = new InstructionSetCodification();
-        AddressingModesCodification addressingModesCodifications = new AddressingModesCodification();
-        GeneralRegistersCodification generalRegistersCodifications = new GeneralRegistersCodification();
+        private Dictionary<string, int> instructionSetCodifications = new Dictionary<string, int>();
+        private Dictionary<string, int> addressingModesCodifications = new Dictionary<string, int>();
+        private Dictionary<string, int> generalRegistersCodifications = new Dictionary<string, int>();
 
         public void ParseArchitecture(string[] filepaths)
         {
             string[] architectureCodificationFiles = ReadArchitectureCodificationFiles(filepaths);
-            instructionSetCodifications.Parse(architectureCodificationFiles[INSTRUCTIONS]);
-            addressingModesCodifications.Parse(architectureCodificationFiles[ADDRESSING_MODES]);
-            generalRegistersCodifications.Parse(architectureCodificationFiles[GENERAL_REGISTERS]);
+
+            List<string> instructionSetCodificationLines = Helper.ReadLinesFromFile(architectureCodificationFiles[INSTRUCTIONS]);
+            List<string> addressingModesCodificationLines = Helper.ReadLinesFromFile(architectureCodificationFiles[ADDRESSING_MODES]);
+            List<string> generalRegistersCodificationLines = Helper.ReadLinesFromFile(architectureCodificationFiles[GENERAL_REGISTERS]);
+
+            instructionSetCodifications = ArchitectureCodificationComponent.CreateCodifications(instructionSetCodificationLines);
+            addressingModesCodifications = ArchitectureCodificationComponent.CreateCodifications(addressingModesCodificationLines);
+            generalRegistersCodifications = ArchitectureCodificationComponent.CreateCodifications(generalRegistersCodificationLines);
         }
 
         private string[] ReadArchitectureCodificationFiles(string[] filepaths)

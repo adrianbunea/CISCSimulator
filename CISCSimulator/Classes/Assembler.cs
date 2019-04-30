@@ -20,7 +20,7 @@ namespace CISCSimulator
         {
             foundTokens.Clear();
             List<string> sourceCodeLines = Helper.ReadLinesFromFile(sourceCode);
-            RemoveComments(ref sourceCodeLines);
+            sourceCodeLines = RemoveComments(sourceCodeLines);
             FindTokens(sourceCodeLines);
 
             return foundTokens;
@@ -31,8 +31,7 @@ namespace CISCSimulator
             foreach (string line in sourceCodeLines)
             {
                 List<string> splitLine = SplitSourceCodeLine(line);
-                Helper.RemoveEmptyParts(ref splitLine);
-                foundTokens.AddRange(splitLine);
+                foundTokens.AddRange(Helper.RemoveEmptyParts(splitLine));
             }
 
             CheckIfFileWasEmpty();
@@ -51,19 +50,24 @@ namespace CISCSimulator
             }
         }
 
-        private void RemoveComments(ref List<string> sourceCodeLines)
+        private List<string> RemoveComments(List<string> sourceCodeLines)
         {
             for (int i = 0; i < sourceCodeLines.Count; i++)
             {
                 string[] lineParts = sourceCodeLines[i].Split(commentSymbol);
                 sourceCodeLines[i] = lineParts[0];
             }
+            return sourceCodeLines;
         }
 
         public void InitializeArchitecture(string[] filepaths)
         {
-            architectureCodification = new ArchitectureCodification();
             architectureCodification.ParseArchitecture(filepaths);
+        }
+
+        public Assembler()
+        {
+            architectureCodification = new ArchitectureCodification();
         }
     }
 }

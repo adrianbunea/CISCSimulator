@@ -19,7 +19,7 @@ namespace CISCSimulator
 {
     public partial class MainWindow : Window
     {
-        Assembler assembler;
+        Assembler assembler = new Assembler();
         string sourceCode;
         bool[] parseLocks = new bool[2] { false, false };
 
