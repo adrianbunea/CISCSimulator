@@ -40,11 +40,6 @@ namespace CISCSimulator
             List<string> instructionLines = Helper.ReadLinesFromFile(instructionsCodificationFile);
             CreateCodifications(instructionLines);
         }
-
-        public InstructionSetCodification(string instructionsCodificationFile)
-        {
-            Parse(instructionsCodificationFile);
-        }
     }
 
     public class AddressingModesCodification : ArchitectureCodificationComponent
@@ -54,11 +49,6 @@ namespace CISCSimulator
             List<string> addressingModesLines = Helper.ReadLinesFromFile(addressingModesCodificationFile);
             CreateCodifications(addressingModesLines);
         }
-
-        public AddressingModesCodification(string addressingModesCodificationFile)
-        {
-            Parse(addressingModesCodificationFile);
-        }
     }
 
     public class GeneralRegistersCodification : ArchitectureCodificationComponent
@@ -67,11 +57,6 @@ namespace CISCSimulator
         {
             List<string> generalRegistersLines = Helper.ReadLinesFromFile(generalRegistersCodificationFile);
             CreateCodifications(generalRegistersLines);
-        }
-
-        public GeneralRegistersCodification(string generalRegistersCodificationFile)
-        {
-            Parse(generalRegistersCodificationFile);
         }
     }
 }

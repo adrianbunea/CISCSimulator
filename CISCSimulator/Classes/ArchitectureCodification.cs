@@ -13,16 +13,16 @@ namespace CISCSimulator
         private readonly int ADDRESSING_MODES = 1;
         private readonly int GENERAL_REGISTERS = 2;
 
-        InstructionSetCodification instructionSetCodifications;
-        AddressingModesCodification addressingModesCodifications;
-        GeneralRegistersCodification generalRegistersCodifications;
+        InstructionSetCodification instructionSetCodifications = new InstructionSetCodification();
+        AddressingModesCodification addressingModesCodifications = new AddressingModesCodification();
+        GeneralRegistersCodification generalRegistersCodifications = new GeneralRegistersCodification();
 
         public void ParseArchitecture(string[] filepaths)
         {
             string[] architectureCodificationFiles = ReadArchitectureCodificationFiles(filepaths);
-            instructionSetCodifications = new InstructionSetCodification(architectureCodificationFiles[INSTRUCTIONS]);
-            addressingModesCodifications = new AddressingModesCodification(architectureCodificationFiles[ADDRESSING_MODES]);
-            generalRegistersCodifications = new GeneralRegistersCodification(architectureCodificationFiles[GENERAL_REGISTERS]);
+            instructionSetCodifications.Parse(architectureCodificationFiles[INSTRUCTIONS]);
+            addressingModesCodifications.Parse(architectureCodificationFiles[ADDRESSING_MODES]);
+            generalRegistersCodifications.Parse(architectureCodificationFiles[GENERAL_REGISTERS]);
         }
 
         private string[] ReadArchitectureCodificationFiles(string[] filepaths)
