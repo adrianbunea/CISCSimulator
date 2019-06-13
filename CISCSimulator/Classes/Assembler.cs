@@ -65,6 +65,28 @@ namespace CISCSimulator
             architectureCodification.ParseArchitecture(filepaths);
         }
 
+        public List<UInt16> GenerateMachineCode(string sourceCode)
+        {
+            Instruction.instructionSetCodifications = architectureCodification.instructionSetCodifications;
+            Instruction.addressingModesCodifications = architectureCodification.addressingModesCodifications;
+            Instruction.generalRegistersCodifications = architectureCodification.generalRegistersCodifications;
+
+            List<UInt16> machineCode = new List<UInt16>();
+            List<string> assemblyInstructions = Helper.ReadLinesFromFile(sourceCode);
+            foreach (string assemblyInstruction in assemblyInstructions)
+            {
+                List<UInt16> machineInstructions = GenerateMachineInstructions(new Instruction(assemblyInstruction));
+                machineCode.AddRange(machineInstructions);
+            }
+            return machineCode;
+        }
+
+        private List<UInt16> GenerateMachineInstructions(Instruction assemblyInstruction)
+        {
+            List<UInt16> machineInstructions = assemblyInstruction.GenerateInstructions();
+            return machineInstructions;
+        }
+
         public Assembler()
         {
             architectureCodification = new ArchitectureCodification();

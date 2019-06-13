@@ -32,6 +32,7 @@ namespace CISCSimulator
         private void OpenFile(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
+
             if (openFileDialog.ShowDialog() == true)
             {
                 string filepath = openFileDialog.FileName;
@@ -51,6 +52,8 @@ namespace CISCSimulator
             {
                 tokensListView.Items.Add(token);
             }
+
+            generateMachineInstructionsButton.IsEnabled = true;
         }
 
         private void InitializeAssembler(object sender, RoutedEventArgs e)
@@ -66,6 +69,17 @@ namespace CISCSimulator
                 assembler.InitializeArchitecture(filepaths);
                 parseLocks[1] = true;
                 parseCodeButton.IsEnabled = parseLocks[0] && parseLocks[1];
+            }
+        }
+
+        private void GenerateMachineCode(object sender, RoutedEventArgs e)
+        {
+            List<UInt16> machineInstructions = assembler.GenerateMachineCode(sourceCode);
+            machineInstructionsListView.Items.Clear();
+
+            foreach (Int16 instruction in machineInstructions)
+            {
+                machineInstructionsListView.Items.Add(instruction);
             }
         }
     }

@@ -69,6 +69,9 @@
     <Compile Include="Classes\Constants.cs" />
     <Compile Include="Classes\Helper.cs" />
     <Compile Include="Classes\ArchitectureCodification.cs" />
+    <Compile Include="Classes\BinaryInstruction.cs" />
+    <Compile Include="Classes\Instruction.cs" />
+    <Compile Include="Classes\Masks.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

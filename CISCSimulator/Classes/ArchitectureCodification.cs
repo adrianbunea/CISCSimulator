@@ -13,9 +13,9 @@ namespace CISCSimulator
         private readonly int ADDRESSING_MODES = 1;
         private readonly int GENERAL_REGISTERS = 2;
 
-        private Dictionary<string, int> instructionSetCodifications = new Dictionary<string, int>();
-        private Dictionary<string, int> addressingModesCodifications = new Dictionary<string, int>();
-        private Dictionary<string, int> generalRegistersCodifications = new Dictionary<string, int>();
+        public Dictionary<string, int> instructionSetCodifications = new Dictionary<string, int>();
+        public Dictionary<string, int> addressingModesCodifications = new Dictionary<string, int>();
+        public Dictionary<string, int> generalRegistersCodifications = new Dictionary<string, int>();
 
         public void ParseArchitecture(string[] filepaths)
         {
