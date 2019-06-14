@@ -64,13 +64,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Classes\ArchitectureCodificationComponent.cs" />
-    <Compile Include="Classes\Assembler.cs" />
-    <Compile Include="Classes\Constants.cs" />
+    <Compile Include="Classes\Assembler\ArchitectureCodificationComponent.cs" />
+    <Compile Include="Classes\Assembler\Assembler.cs" />
+    <Compile Include="Classes\Assembler\Constants.cs" />
     <Compile Include="Classes\Helper.cs" />
-    <Compile Include="Classes\ArchitectureCodification.cs" />
-    <Compile Include="Classes\BinaryInstruction.cs" />
-    <Compile Include="Classes\Instruction.cs" />
+    <Compile Include="Classes\Assembler\ArchitectureCodification.cs" />
+    <Compile Include="Classes\Assembler\Instruction.cs" />
     <Compile Include="Classes\Masks.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
