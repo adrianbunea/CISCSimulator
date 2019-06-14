@@ -23,6 +23,8 @@ namespace CISCSimulator
         Assembler assembler = new Assembler();
         string sourceCode;
         bool[] parseLocks = new bool[2] { false, false };
+        int previousBase = 16;
+        int currentBase = 16;
 
         public MainWindow()
         {
@@ -92,8 +94,42 @@ namespace CISCSimulator
 
             foreach (UInt16 instruction in machineInstructions)
             {
-                machineInstructionsListView.Items.Add(Convert.ToString(instruction, 16).ToUpper());
+                machineInstructionsListView.Items.Add(Convert.ToString(instruction, currentBase).PadLeft(4, '0').ToUpper());
             }
+        }
+
+        private void ChangeBase(object sender, RoutedEventArgs e)
+        {
+            MenuItem item = sender as MenuItem;
+            previousBase = currentBase;
+            currentBase = Int32.Parse(item.Header.ToString());
+
+            int padding;
+            switch (currentBase)
+            {
+                case 2:
+                    padding = 16;
+                    break;
+                case 16:
+                    padding = 4;
+                    break;
+                default:
+                    padding = 0;
+                    break;
+            }
+
+            List<string> instructions = new List<string>();
+            foreach (string instruction in machineInstructionsListView.Items)
+            {
+                int base10Instruction = Convert.ToInt32(instruction, previousBase);
+                instructions.Add(Convert.ToString(base10Instruction, currentBase).PadLeft(padding, '0').ToUpper());
+            }
+
+            machineInstructionsListView.Items.Clear();
+            foreach (string instruction in instructions)
+            {
+                machineInstructionsListView.Items.Add(instruction);
+            } 
         }
     }
 }

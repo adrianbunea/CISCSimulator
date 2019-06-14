@@ -32,7 +32,15 @@
             <Button Name="parseCodeButton" Grid.Column="1" Height="40" Content="Parse" Click="ParseCode" IsEnabled="False"/>
             <ListView Name="tokensListView" Grid.Column="2"/>
 
-            <Button Name="generateMachineInstructionsButton" Grid.Column="3" Height="40" Content="Generate" Click="GenerateMachineCode" IsEnabled="False"/>
+            <Button Name="generateMachineInstructionsButton" Grid.Column="3" Height="40" Content="Generate" Click="GenerateMachineCode" IsEnabled="False" VerticalAlignment="Center"/>
+            <ToolBar Header="Base" Name="changeBaseToolbar" Grid.Column="3" Height="20" IsEnabled="True" VerticalAlignment="Top">
+                <Menu>
+                    <MenuItem Header="2" Click="ChangeBase"/>
+                    <MenuItem Header="10" Click="ChangeBase"/>
+                    <MenuItem Header="16" Click="ChangeBase"/>
+                </Menu>
+                
+            </ToolBar>
             <ListView Name="machineInstructionsListView" Grid.Column="4"/>
         </Grid>
         
