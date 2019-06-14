@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
 using Microsoft.Win32;
+using Path = System.IO.Path;
 
 namespace CISCSimulator
 {
@@ -31,7 +32,14 @@ namespace CISCSimulator
 
         private void OpenFile(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            string path = Directory.GetCurrentDirectory();
+            path = Path.GetFullPath(Path.Combine(path, @"..\..\"));
+            path += "Assembly Code Files";
+
+            OpenFileDialog openFileDialog = new OpenFileDialog()
+            {
+                InitialDirectory = path
+            };
 
             if (openFileDialog.ShowDialog() == true)
             {
@@ -58,8 +66,13 @@ namespace CISCSimulator
 
         private void InitializeAssembler(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog
+            string path = Directory.GetCurrentDirectory();
+            path = Path.GetFullPath(Path.Combine(path, @"..\..\"));
+            path += "Architecture Files";
+
+            OpenFileDialog openFileDialog = new OpenFileDialog()
             {
+                InitialDirectory = path,
                 Multiselect = true
             };
 
@@ -77,9 +90,9 @@ namespace CISCSimulator
             List<UInt16> machineInstructions = assembler.GenerateMachineCode(sourceCode);
             machineInstructionsListView.Items.Clear();
 
-            foreach (Int16 instruction in machineInstructions)
+            foreach (UInt16 instruction in machineInstructions)
             {
-                machineInstructionsListView.Items.Add(instruction);
+                machineInstructionsListView.Items.Add(Convert.ToString(instruction, 16).ToUpper());
             }
         }
     }

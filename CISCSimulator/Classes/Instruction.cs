@@ -10,7 +10,7 @@ namespace CISCSimulator
     class Instruction
     {
         private readonly Regex regexImmediateValue = new Regex(@"(?<![r\]\d])\d{1,5}(?![\[\]\d])", RegexOptions.IgnoreCase);
-        private readonly Regex regexDirectValue = new Regex(@"(?<!\[)r\d{1,2}(?!\])", RegexOptions.IgnoreCase);
+        private readonly Regex regexDirectValue = new Regex(@"(?<!\[r)(?<=r)\d{1,2}(?!\])", RegexOptions.IgnoreCase);
         private readonly Regex regexIndirectValue = new Regex(@"(?<!\d\[r)(?<=\[r)(\d{1,2})(?=\])(?!\]\d{1,5})", RegexOptions.IgnoreCase);
         private readonly Regex regexIndexedValue = new Regex(@"(\[r\d{1,2}\])\d{1,5}|\d{1,5}(\[r\d{1,2}\])", RegexOptions.IgnoreCase);
         private readonly Regex regexIndexedRegister = new Regex(@"(?<=\[r)\d{1,2}(?=\])", RegexOptions.IgnoreCase);
@@ -22,7 +22,10 @@ namespace CISCSimulator
         public static Dictionary<string, int> addressingModesCodifications;
         public static Dictionary<string, int> generalRegistersCodifications;
 
-        private string assemblyContent = "";
+        private readonly string assemblyContent = "";
+        private string opcode;
+        private UInt16 binaryOpcode;
+        private int instructionClass;
 
         private UInt16 sourceAddressingMode;
         private Int16 immediateSource;
@@ -39,26 +42,25 @@ namespace CISCSimulator
 
         private Int16 offset;
 
-        public string GetOpcode()
+        private void GenerateOpcode()
         {
-            string opcode = this.assemblyContent.Split(' ')[0].Trim();
-            return opcode;
+            opcode = this.assemblyContent.Split(' ')[0].Trim();
         }
 
-        public UInt16 GetBinaryOpcode()
+        private void GenerateBinaryOpcode()
         {
-            UInt16 opcodeBits = (UInt16)instructionSetCodifications[GetOpcode()];
-            int shiftCount = Convert.ToString(instructionSetCodifications[GetOpcode()], 2).Length;
-            if (shiftCount < 3) shiftCount = 4;
+            UInt16 opcodeBits = (UInt16)instructionSetCodifications[opcode];
+            int shiftCount = Convert.ToString(instructionSetCodifications[opcode], 2).Length;
+            if (shiftCount < 4) shiftCount = 4;
             opcodeBits <<= 16-shiftCount;
-            return opcodeBits;
+            binaryOpcode = opcodeBits;
         }
 
-        public int GetClass()
+        public void GenerateClass()
         {
             int c0, c1, b15, b14, b13;
 
-            UInt16 bits = GetBinaryOpcode();
+            UInt16 bits = binaryOpcode;
 
             b15 = (bits & (UInt16)Masks.BIT15) >> 15;
             b14 = (bits & (UInt16)Masks.BIT14) >> 14;
@@ -67,12 +69,11 @@ namespace CISCSimulator
             c0 = b15 & (~(~b14 & b13));
             c1 = b15 & (b14 ^ b13);
 
-            int instructionClass = c0 + c1 << 1; 
+            instructionClass = c0 + (c1 << 1); 
             //0 - b1
             //1 - b2
             //3 - b3
             //2 - b4
-            return instructionClass;
         }
 
         public int GetSourceAddressingMode()
@@ -87,143 +88,155 @@ namespace CISCSimulator
 
         private void GenerateSource()
         {
-            switch (GetClass())
+            if (instructionClass == 0)
             {
-                case 0:
-                    List<string> splitInstruction = assemblyContent.Split(splitTerms).ToList();
-                    splitInstruction = Helper.RemoveEmptyParts(splitInstruction);
-                    string assemblySource = splitInstruction[2];
+                bool foundMatch = false;
+                List<string> splitInstruction = assemblyContent.Split(splitTerms).ToList();
+                splitInstruction = Helper.RemoveEmptyParts(splitInstruction);
+                string assemblySource = splitInstruction[2];
 
-                    MatchCollection matches = regexImmediateValue.Matches(assemblySource);
-                    if (matches.Count > 0)
-                    {
-                        sourceAddressingMode = 0;
-                        immediateSource = Int16.Parse(matches[0].Value);
-                    }
+                MatchCollection matches = regexImmediateValue.Matches(assemblySource);
+                if (matches.Count > 0)
+                {
+                    sourceAddressingMode = 0;
+                    immediateSource = Int16.Parse(matches[0].Value);
+                    foundMatch = true;
+                }
 
-                    matches = regexDirectValue.Matches(assemblySource);
-                    if (matches.Count > 0)
-                    {
-                        sourceAddressingMode = 1;
-                        directSource = UInt16.Parse(matches[0].Value);
-                    }
+                matches = regexDirectValue.Matches(assemblySource);
+                if (matches.Count > 0)
+                {
+                    sourceAddressingMode = 1;
+                    directSource = UInt16.Parse(matches[0].Value);
+                    foundMatch = true;
+                }
 
-                    matches = regexIndirectValue.Matches(assemblySource);
-                    if (matches.Count > 0)
-                    {
-                        sourceAddressingMode = 2;
-                        indirectSource =  UInt16.Parse(matches[0].Value);
-                    }
+                matches = regexIndirectValue.Matches(assemblySource);
+                if (matches.Count > 0)
+                {
+                    sourceAddressingMode = 2;
+                    indirectSource =  UInt16.Parse(matches[0].Value);
+                    foundMatch = true;
+                }
 
-                    matches = regexIndexedValue.Matches(assemblySource);
-                    if (matches.Count > 0)
-                    {
-                        sourceAddressingMode = 3;
-                        Match temp = matches[0];
+                matches = regexIndexedValue.Matches(assemblySource);
+                if (matches.Count > 0)
+                {
+                    sourceAddressingMode = 3;
+                    Match temp = matches[0];
  
-                        matches = regexIndexedRegister.Matches(temp.Value);
-                        indexedSource = UInt16.Parse(matches[0].Value);
+                    matches = regexIndexedRegister.Matches(temp.Value);
+                    indexedSource = UInt16.Parse(matches[0].Value);
 
-                        matches = regexIndexedOffset.Matches(temp.Value);
-                        indexedSourceOffset = Int16.Parse(matches[0].Value);
-                    }
-                    else throw new Exception("Unknown addressing mode!");
-                    break;
-                default:
-                    throw new Exception("Only B1 instructions have a source field.");
+                    matches = regexIndexedOffset.Matches(temp.Value);
+                    indexedSourceOffset = Int16.Parse(matches[0].Value);
+
+                    foundMatch = true;
+                }
+
+                if (foundMatch == false) throw new Exception("Unknown addressing mode!");
             }
         }
 
         void GenerateDestination()
         {
-            switch (GetClass())
+            bool foundMatch = false;
+            List<string> splitInstruction = assemblyContent.Split(splitTerms).ToList();
+            splitInstruction = Helper.RemoveEmptyParts(splitInstruction);
+            string assemblyDestination;
+
+            if (instructionClass == 0)
             {
-                case 0:
-                    List<string> splitInstruction = assemblyContent.Split(splitTerms).ToList();
-                    splitInstruction = Helper.RemoveEmptyParts(splitInstruction);
-                    string assemblyDestination = splitInstruction[1];
+                assemblyDestination = splitInstruction[1];
 
-                    MatchCollection matches = regexImmediateValue.Matches(assemblyDestination);
-                    if (matches.Count > 0)
-                    {
-                        throw new Exception("Destination cannot be an immediate value!");
-                    }
+                MatchCollection matches = regexImmediateValue.Matches(assemblyDestination);
+                if (matches.Count > 0)
+                {
+                    throw new Exception("Destination cannot be an immediate value!");
+                }
 
-                    matches = regexDirectValue.Matches(assemblyDestination);
-                    if (matches.Count > 0)
-                    {
-                        destinationAddressingMode = 1;
-                        directDestination = UInt16.Parse(matches[0].Value);
-                    }
+                matches = regexDirectValue.Matches(assemblyDestination);
+                if (matches.Count > 0)
+                {
+                    destinationAddressingMode = 1;
+                    directDestination = UInt16.Parse(matches[0].Value);
+                    foundMatch = true;
+                }
 
-                    matches = regexIndirectValue.Matches(assemblyDestination);
-                    if (matches.Count > 0)
-                    {
-                        destinationAddressingMode = 2;
-                        indirectDestination = UInt16.Parse(matches[0].Value);
-                    }
+                matches = regexIndirectValue.Matches(assemblyDestination);
+                if (matches.Count > 0)
+                {
+                    destinationAddressingMode = 2;
+                    indirectDestination = UInt16.Parse(matches[0].Value);
+                    foundMatch = true;
+                }
 
-                    matches = regexIndexedValue.Matches(assemblyDestination);
-                    if (matches.Count > 0)
-                    {
-                        destinationAddressingMode = 3;
-                        Match temp = matches[0];
+                matches = regexIndexedValue.Matches(assemblyDestination);
+                if (matches.Count > 0)
+                {
+                    destinationAddressingMode = 3;
+                    Match temp = matches[0];
 
-                        matches = regexIndexedRegister.Matches(temp.Value);
-                        indexedDestination = UInt16.Parse(matches[0].Value);
+                    matches = regexIndexedRegister.Matches(temp.Value);
+                    indexedDestination = UInt16.Parse(matches[0].Value);
 
-                        matches = regexIndexedOffset.Matches(temp.Value);
-                        indexedDestinationOffset = Int16.Parse(matches[0].Value);
-                    }
-                    else throw new Exception("Unknown addressing mode!");
-                    break;
-                case 1:
-                    splitInstruction = assemblyContent.Split(splitTerms).ToList();
-                    splitInstruction = Helper.RemoveEmptyParts(splitInstruction);
-                    assemblyDestination = splitInstruction[1];
+                    matches = regexIndexedOffset.Matches(temp.Value);
+                    indexedDestinationOffset = Int16.Parse(matches[0].Value);
 
-                    matches = regexImmediateValue.Matches(assemblyDestination);
-                    if (matches.Count > 0)
-                    {
-                        throw new Exception("Destination cannot be an immediate value!");
-                    }
+                    foundMatch = true;
+                }
 
-                    matches = regexDirectValue.Matches(assemblyDestination);
-                    if (matches.Count > 0)
-                    {
-                        destinationAddressingMode = 1;
-                        directDestination = UInt16.Parse(matches[0].Value);
-                    }
+                if (foundMatch == false) throw new Exception("Unknown addressing mode!");
+            }
 
-                    matches = regexIndirectValue.Matches(assemblyDestination);
-                    if (matches.Count > 0)
-                    {
-                        destinationAddressingMode = 2;
-                        indirectDestination = UInt16.Parse(matches[0].Value);
-                    }
+            if (instructionClass == 1)
+            {
+                assemblyDestination = splitInstruction[1];
 
-                    matches = regexIndexedValue.Matches(assemblyDestination);
-                    if (matches.Count > 0)
-                    {
-                        destinationAddressingMode = 3;
-                        Match temp = matches[0];
+                MatchCollection matches = regexImmediateValue.Matches(assemblyDestination);
+                if (matches.Count > 0)
+                {
+                    throw new Exception("Destination cannot be an immediate value!");
+                }
 
-                        matches = regexIndexedRegister.Matches(temp.Value);
-                        indexedDestination = UInt16.Parse(matches[0].Value);
+                matches = regexDirectValue.Matches(assemblyDestination);
+                if (matches.Count > 0)
+                {
+                    destinationAddressingMode = 1;
+                    directDestination = UInt16.Parse(matches[0].Value);
+                    foundMatch = true;
+                }
 
-                        matches = regexIndexedOffset.Matches(temp.Value);
-                        indexedDestinationOffset = Int16.Parse(matches[0].Value);
-                    }
-                    else throw new Exception("Unknown addressing mode!");
-                    break;
-                default:
-                    throw new Exception("Only B1 and B2 instructions have a destination field.");
+                matches = regexIndirectValue.Matches(assemblyDestination);
+                if (matches.Count > 0)
+                {
+                    destinationAddressingMode = 2;
+                    indirectDestination = UInt16.Parse(matches[0].Value);
+                    foundMatch = true;
+                }
+
+                matches = regexIndexedValue.Matches(assemblyDestination);
+                if (matches.Count > 0)
+                {
+                    destinationAddressingMode = 3;
+                    Match temp = matches[0];
+
+                    matches = regexIndexedRegister.Matches(temp.Value);
+                    indexedDestination = UInt16.Parse(matches[0].Value);
+
+                    matches = regexIndexedOffset.Matches(temp.Value);
+                    indexedDestinationOffset = Int16.Parse(matches[0].Value);
+
+                    foundMatch = true;
+                }
+
+                if (foundMatch == false) throw new Exception("Unknown addressing mode!");
             }
         }
 
         void GenerateOffset()
         {
-            if (GetClass() == 3)
+            if (instructionClass == 3)
             {
                 List<string> splitInstruction = assemblyContent.Split(splitTerms).ToList();
                 splitInstruction = Helper.RemoveEmptyParts(splitInstruction);
@@ -235,8 +248,14 @@ namespace CISCSimulator
         public List<UInt16> GenerateInstructions()
         {
             List<UInt16> instructions = new List<UInt16>();
+            GenerateOpcode();
+            GenerateBinaryOpcode();
+            GenerateClass();
+            GenerateSource();
+            GenerateDestination();
+            GenerateOffset();
 
-            switch (GetClass())
+            switch (instructionClass)
             {
                 case 0:
                     instructions.AddRange(GenerateB1Instructions());
@@ -259,7 +278,7 @@ namespace CISCSimulator
         List<UInt16> GenerateB1Instructions()
         {
             List<UInt16> instructions = new List<UInt16>();
-            UInt16 opcode = GetBinaryOpcode();
+            UInt16 opcode = binaryOpcode;
 
             UInt16 source;            
             UInt16 destination;
@@ -323,7 +342,7 @@ namespace CISCSimulator
         List<UInt16> GenerateB2Instructions()
         {
             List<UInt16> instructions = new List<UInt16>();
-            UInt16 opcode = GetBinaryOpcode();
+            UInt16 opcode = binaryOpcode;
 
             UInt16 destination;
 
@@ -357,7 +376,7 @@ namespace CISCSimulator
 
         UInt16 GenerateB3Instruction()
         {
-            UInt16 opcode = GetBinaryOpcode();
+            UInt16 opcode = binaryOpcode;
             UInt16 uOffset = (UInt16)(offset & (UInt16)Masks.OFFSET);
             UInt16 instruction = (UInt16)(opcode | uOffset);
             return instruction;
@@ -365,7 +384,7 @@ namespace CISCSimulator
 
         UInt16 GenerateB4Instruction()
         {
-            return GetBinaryOpcode();
+            return binaryOpcode;
         }
 
         public Instruction(string assemblyInstruction)
