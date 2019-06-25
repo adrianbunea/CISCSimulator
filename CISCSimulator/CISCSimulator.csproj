@@ -71,6 +71,18 @@
     <Compile Include="Classes\Assembler\ArchitectureCodification.cs" />
     <Compile Include="Classes\Assembler\Instruction.cs" />
     <Compile Include="Classes\Masks.cs" />
+    <Compile Include="Classes\Simulator\ArithmeticLogicalUnit.cs" />
+    <Compile Include="Classes\Simulator\Bus.cs" />
+    <Compile Include="Classes\Simulator\Registers\AddressRegister.cs" />
+    <Compile Include="Classes\Simulator\Registers\BufferRegister.cs" />
+    <Compile Include="Classes\Simulator\Registers\FlagsRegister.cs" />
+    <Compile Include="Classes\Simulator\Registers\GeneralRegisters.cs" />
+    <Compile Include="Classes\Simulator\Registers\InstructionRegister.cs" />
+    <Compile Include="Classes\Simulator\Memory.cs" />
+    <Compile Include="Classes\Simulator\Processor.cs" />
+    <Compile Include="Classes\Simulator\Registers\MemoryDataRegister.cs" />
+    <Compile Include="Classes\Simulator\Registers\Register.cs" />
+    <Compile Include="Classes\Simulator\Sequencer.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -106,8 +118,8 @@
     <Resource Include="Architecture Files\Instructiuni.txt" />
     <Resource Include="Architecture Files\ModuriAdresare.txt" />
     <Resource Include="Architecture Files\RegistriiGenerali.txt" />
-    <Content Include="Assembly Code Files\EmptyFile.asm" />
-    <Content Include="Assembly Code Files\Program.asm" />
+    <Content Include="Source Code Files\EmptyFile.asm" />
+    <Content Include="Source Code Files\Program.asm" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

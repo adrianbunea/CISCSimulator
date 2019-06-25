@@ -10,6 +10,7 @@ namespace CISCSimulator
     class Assembler
     {
         private ArchitectureCodification architectureCodification;
+        public List<UInt16> machineCode;
 
         private readonly char commentSymbol = ';';
         private readonly char[] symbols = { ':', ',', ' ', '(', ')' };
@@ -65,7 +66,7 @@ namespace CISCSimulator
             architectureCodification.ParseArchitecture(filepaths);
         }
 
-        public List<UInt16> GenerateMachineCode(string sourceCode)
+        public void GenerateMachineCode(string sourceCode)
         {
             Instruction.instructionSetCodifications = architectureCodification.instructionSetCodifications;
             Instruction.addressingModesCodifications = architectureCodification.addressingModesCodifications;
@@ -78,7 +79,7 @@ namespace CISCSimulator
                 List<UInt16> machineInstructions = GenerateMachineInstructions(new Instruction(assemblyInstruction));
                 machineCode.AddRange(machineInstructions);
             }
-            return machineCode;
+            this.machineCode = machineCode;
         }
 
         private List<UInt16> GenerateMachineInstructions(Instruction assemblyInstruction)

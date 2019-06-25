@@ -22,6 +22,7 @@ namespace CISCSimulator
     {
         Assembler assembler = new Assembler();
         string sourceCode;
+        string sourceFileName;
         bool[] parseLocks = new bool[2] { false, false };
         int previousBase = 16;
         int currentBase = 16;
@@ -36,7 +37,7 @@ namespace CISCSimulator
         {
             string path = Directory.GetCurrentDirectory();
             path = Path.GetFullPath(Path.Combine(path, @"..\..\"));
-            path += "Assembly Code Files";
+            path += "Source Code Files";
 
             OpenFileDialog openFileDialog = new OpenFileDialog()
             {
@@ -46,6 +47,7 @@ namespace CISCSimulator
             if (openFileDialog.ShowDialog() == true)
             {
                 string filepath = openFileDialog.FileName;
+                sourceFileName = filepath.Split('\\').Last();
                 sourceCode = File.ReadAllText(filepath);
                 codeTextBox.Text = sourceCode;
             }
@@ -89,13 +91,16 @@ namespace CISCSimulator
 
         private void GenerateMachineCode(object sender, RoutedEventArgs e)
         {
-            List<UInt16> machineInstructions = assembler.GenerateMachineCode(sourceCode);
+            assembler.GenerateMachineCode(sourceCode);
+            List<UInt16> machineInstructions = assembler.machineCode;
             machineInstructionsListView.Items.Clear();
 
             foreach (UInt16 instruction in machineInstructions)
             {
                 machineInstructionsListView.Items.Add(Convert.ToString(instruction, currentBase).PadLeft(4, '0').ToUpper());
             }
+
+            saveBinaryMenuItem.IsEnabled = true;
         }
 
         private void ChangeBase(object sender, RoutedEventArgs e)
@@ -130,6 +135,22 @@ namespace CISCSimulator
             {
                 machineInstructionsListView.Items.Add(instruction);
             } 
+        }
+
+        private void SaveBinary(object sender, RoutedEventArgs e)
+        {
+            string currentDirectory = Directory.GetCurrentDirectory();
+            currentDirectory = Path.GetFullPath(Path.Combine(currentDirectory, @"..\..\")) + "Source Code Files";
+            string fileName = sourceFileName.Split('.')[0] + @".bin";
+            fileName = Path.GetFullPath(Path.Combine(currentDirectory, fileName));
+
+            using (BinaryWriter writer = new BinaryWriter(File.Open(fileName, FileMode.Create)))
+            {
+                foreach (UInt16 instruction in assembler.machineCode)
+                {
+                    writer.Write(instruction);
+                }
+            }
         }
     }
 }
