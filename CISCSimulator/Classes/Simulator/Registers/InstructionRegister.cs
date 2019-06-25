@@ -8,7 +8,7 @@ namespace CISCSimulator.Classes.Simulator
 {
     class InstructionRegister : Register
     {
-        public int SelectedRegister
+        public Int16 Offset
         {
             get
             {

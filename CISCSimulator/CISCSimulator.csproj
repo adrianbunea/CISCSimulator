@@ -72,7 +72,10 @@
     <Compile Include="Classes\Assembler\Instruction.cs" />
     <Compile Include="Classes\Masks.cs" />
     <Compile Include="Classes\Simulator\ArithmeticLogicalUnit.cs" />
-    <Compile Include="Classes\Simulator\Bus.cs" />
+    <Compile Include="Classes\Simulator\Buses\Bus.cs" />
+    <Compile Include="Classes\Simulator\Buses\DestinationBus.cs" />
+    <Compile Include="Classes\Simulator\Buses\ResultBus.cs" />
+    <Compile Include="Classes\Simulator\Buses\SourceBus.cs" />
     <Compile Include="Classes\Simulator\Registers\AddressRegister.cs" />
     <Compile Include="Classes\Simulator\Registers\BufferRegister.cs" />
     <Compile Include="Classes\Simulator\Registers\FlagsRegister.cs" />
@@ -80,8 +83,10 @@
     <Compile Include="Classes\Simulator\Registers\InstructionRegister.cs" />
     <Compile Include="Classes\Simulator\Memory.cs" />
     <Compile Include="Classes\Simulator\Processor.cs" />
+    <Compile Include="Classes\Simulator\Registers\InterruptVectorRegister.cs" />
     <Compile Include="Classes\Simulator\Registers\MemoryDataRegister.cs" />
     <Compile Include="Classes\Simulator\Registers\Register.cs" />
+    <Compile Include="Classes\Simulator\Registers\StackPointer.cs" />
     <Compile Include="Classes\Simulator\Sequencer.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

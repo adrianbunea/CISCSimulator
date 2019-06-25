@@ -9,34 +9,41 @@ namespace CISCSimulator.Classes.Simulator
     class GeneralRegisters
     {
         Bus DBUS;
+        InstructionRegister instructionRegister;
+
+        public Register SelectedRegister
+        {
+            get
+            {
+                return RG[instructionRegister.Offset];
+            }
+        }
 
         public void SetDBUS(Bus DBUS)
         {
             this.DBUS = DBUS;
         }
 
-        InstructionRegister instructionRegister;
-
         public void SetInstructionRegister(InstructionRegister instructionRegister)
         {
             this.instructionRegister = instructionRegister;
         }
 
-        UInt16[] RG;
+        Register[] RG;
 
-        public void PdRG()
-        {
-            DBUS.bits = RG[instructionRegister.SelectedRegister];
-        }
+        //public UInt16 SelectedRegister()
+        //{
+        //    return RG[instructionRegister.Offset];
+        //}
 
-        public void PmRG()
-        {
-            RG[instructionRegister.SelectedRegister] = DBUS.bits;
-        }
+        //public void PmRG()
+        //{
+        //    RG[instructionRegister.Offset] = DBUS.bits;
+        //}
 
         public GeneralRegisters()
         {
-            RG = new UInt16[16];
+            RG = new Register[16];
         }
     }
 }

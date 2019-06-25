@@ -6,13 +6,7 @@ using System.Threading.Tasks;
 
 namespace CISCSimulator.Classes.Simulator
 {
-    class Register
+    class InterruptVectorRegister : Register
     {
-        public Int16 bits;
-
-        public Register()
-        {
-            bits = 0;
-        }
     }
 }

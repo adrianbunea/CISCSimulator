@@ -6,13 +6,7 @@ using System.Threading.Tasks;
 
 namespace CISCSimulator.Classes.Simulator
 {
-    class Bus
+    class StackPointer : Register
     {
-        public UInt16 bits;
-
-        public Bus()
-        {
-            bits = 0;
-        }
     }
 }

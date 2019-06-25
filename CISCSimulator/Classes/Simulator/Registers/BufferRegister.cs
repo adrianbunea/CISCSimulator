@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CISCSimulator.Classes.Simulator.Registers
+namespace CISCSimulator.Classes.Simulator
 {
     class BufferRegister : Register
     {

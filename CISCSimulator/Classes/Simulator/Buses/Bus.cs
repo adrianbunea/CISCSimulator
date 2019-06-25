@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace CISCSimulator.Classes.Simulator
 {
-    class Register
+    class Bus
     {
         public Int16 bits;
 
-        public Register()
+        public Bus()
         {
             bits = 0;
         }

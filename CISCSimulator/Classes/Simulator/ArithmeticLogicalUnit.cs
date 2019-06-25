@@ -6,23 +6,75 @@ using System.Threading.Tasks;
 
 namespace CISCSimulator.Classes.Simulator
 {
-    public enum ALUOperations
-    {
-        SUM,
-        AND,
-        OR,
-        XOR,
-        SBUS,
-        nSBUS,
-        DBUS
-    }
-
     class ArithmeticLogicalUnit
     {
-        private ALUOperations ALUOperation;
-        public void SetALUOperation(ALUOperations ALUOperation)
+        SourceBus _SBUS;
+        DestinationBus _DBUS;
+        ResultBus _RBUS;
+
+        public void SetSBUS(SourceBus SBUS)
         {
-            this.ALUOperation = ALUOperation;
+            _SBUS = SBUS;
+        }
+
+        public void SetDBUS(DestinationBus DBUS)
+        {
+            _DBUS = DBUS;
+        }
+
+        public void SetRBUS(ResultBus RBUS)
+        {
+            _RBUS = RBUS;
+        }
+
+        public void SUM()
+        {
+            _RBUS.bits = (Int16)(_SBUS.bits + _DBUS.bits);
+        }
+        public void AND()
+        {
+            _RBUS.bits = (Int16)(_SBUS.bits + _DBUS.bits);
+        }
+        public void OR()
+        {
+            _RBUS.bits = (Int16)(_SBUS.bits + _DBUS.bits);
+        }
+        public void XOR()
+        {
+            _RBUS.bits = (Int16)(_SBUS.bits + _DBUS.bits);
+        }
+        public void ASL()
+        {
+            _RBUS.bits = (Int16)(_SBUS.bits + _DBUS.bits);
+        }
+        public void ASR()
+        {
+            _RBUS.bits = (Int16)(_SBUS.bits + _DBUS.bits);
+        }
+        public void LSR()
+        {
+            _RBUS.bits = (Int16)(_SBUS.bits + _DBUS.bits);
+        }
+        public void ROL()
+        {
+            _RBUS.bits = (Int16)(_SBUS.bits + _DBUS.bits);
+        }
+        public void ROR()
+        {
+            _RBUS.bits = (Int16)(_SBUS.bits + _DBUS.bits);
+        }
+        public void RLC()
+        {
+            _RBUS.bits = (Int16)(_SBUS.bits + _DBUS.bits);
+        }
+
+        public void RRC()
+        {
+            _RBUS.bits = (Int16)(_SBUS.bits + _DBUS.bits);
+        }
+        public void DBUS()
+        {
+            _RBUS.bits = (Int16)(_SBUS.bits + _DBUS.bits);
         }
     }
 }
