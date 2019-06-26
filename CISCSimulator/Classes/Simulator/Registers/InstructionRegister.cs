@@ -8,6 +8,13 @@ namespace CISCSimulator.Classes.Simulator
 {
     class InstructionRegister : Register
     {
+        ResultBus RBUS;
+        
+        public void SetRBUS(ResultBus RBUS)
+        {
+            this.RBUS = RBUS;
+        }
+
         public Int16 Offset
         {
             get
@@ -21,6 +28,11 @@ namespace CISCSimulator.Classes.Simulator
             {
                 return 0;
             }
+        }
+
+        public void PmIR()
+        {
+            bits = RBUS.bits;
         }
 
         public InstructionRegister()

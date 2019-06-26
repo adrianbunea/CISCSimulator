@@ -22,6 +22,7 @@ namespace CISCSimulator
         C = 0x0001,
         V = 0x0002,
         Z = 0x0004,
-        N = 0x0008
+        N = 0x0008,
+        COND = 0x000F
     }
 }

@@ -13,6 +13,97 @@ namespace CISCSimulator.Classes.Simulator
         ResultBus _RBUS;
         FlagsRegister _FLAGS;
 
+        Int16 COND;
+        Int16 _Cin;
+
+        public Int16 Cout
+        {
+            get
+            {
+                return (Int16)(COND & (int)FLAGS_Masks.C);
+            }
+
+            set
+            {
+                if (value == 1)
+                {
+                    COND = (Int16)(COND | 1 << (int)FLAGS_SHIFTS.C);
+                }
+
+
+                if (value == 0)
+                {
+                    COND = (Int16)(COND & ~(1 << (int)FLAGS_SHIFTS.C));
+                }
+            }
+        }
+
+        public Int16 DCR
+        {
+            get
+            {
+                return (Int16)(COND & (int)FLAGS_Masks.V);
+            }
+
+            set
+            {
+                if (value == 1)
+                {
+                    COND = (Int16)(COND | 1 << (int)FLAGS_SHIFTS.V);
+                }
+
+
+                if (value == 0)
+                {
+                    COND = (Int16)(COND & ~(1 << (int)FLAGS_SHIFTS.V));
+                }
+            }
+        }
+
+        public Int16 N
+        {
+            get
+            {
+                return (Int16)(COND & (int)FLAGS_Masks.N);
+            }
+
+            set
+            {
+                if (value == 1)
+                {
+                    COND = (Int16)(COND | 1 << (int)FLAGS_SHIFTS.N);
+                }
+
+
+                if (value == 0)
+                {
+                    COND = (Int16)(COND & ~(1 << (int)FLAGS_SHIFTS.N));
+                }
+            }
+        }
+
+        public Int16 Z
+        {
+            get
+            {
+                return (Int16)(COND & (int)FLAGS_Masks.Z);
+            }
+
+            set
+            {
+                if (value == 1)
+                {
+                    COND = (Int16)(COND | 1 << (int)FLAGS_SHIFTS.Z);
+                }
+
+
+                if (value == 0)
+                {
+                    COND = (Int16)(COND & ~(1 << (int)FLAGS_SHIFTS.Z));
+                }
+            }
+        }
+
         public void SetSBUS(SourceBus SBUS)
         {
             _SBUS = SBUS;
@@ -71,20 +162,34 @@ namespace CISCSimulator.Classes.Simulator
         }
         public void RLC()
         {
-            Int16 carryBit = (Int16)(_DBUS.bits & (int)Masks.BIT0);
-            _FLAGS.C = carryBit;
+            Cout = (Int16)(_DBUS.bits & (int)Masks.BIT0);
             _RBUS.bits = (Int16)((_DBUS.bits << 1) | (_DBUS.bits >> 15));
         }
 
         public void RRC()
         {
-            Int16 carryBit = (Int16)(_DBUS.bits & (int)Masks.BIT15);
-            _FLAGS.C = carryBit;
+            Cout = (Int16)(_DBUS.bits & (int)Masks.BIT15);
             _RBUS.bits = (Int16)((_DBUS.bits >> 1) | (_DBUS.bits << 15));
         }
         public void DBUS()
         {
             _RBUS.bits = _DBUS.bits;
+        }
+
+        public void PdCOND()
+        {
+            _FLAGS.bits = (Int16)(COND & (int)FLAGS_Masks.COND);
+        }
+
+        public void Cin()
+        {
+            _Cin = 1;
+        }
+
+        public void Cin_PdCOND()
+        {
+            Cin();
+            PdCOND();
         }
     }
 }

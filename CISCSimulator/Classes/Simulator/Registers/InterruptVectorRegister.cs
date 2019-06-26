@@ -8,5 +8,16 @@ namespace CISCSimulator.Classes.Simulator
 {
     class InterruptVectorRegister : Register
     {
+        bool BVI;
+
+        public void A1BVI()
+        {
+            BVI = true;
+        }
+
+        public void A0BVI()
+        {
+            BVI = false;
+        }
     }
 }

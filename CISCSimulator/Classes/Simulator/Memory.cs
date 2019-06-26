@@ -9,40 +9,52 @@ namespace CISCSimulator.Classes.Simulator
     public enum MemoryOperation
     {
         READ,
-        WRITE
+        WRITE,
+        IFCH
     }
 
     class Memory
     {
-        AddressRegister addressRegister;
-        MemoryDataRegister memoryDataRegister;
-
-        public void SetAddressRegister(AddressRegister addressRegister)
-        {
-            this.addressRegister = addressRegister;
-        }
-
-        public void SetMemoryDataRegister(MemoryDataRegister memoryDataRegister)
-        {
-            this.memoryDataRegister = memoryDataRegister;
-        }
-
-        UInt16[] locations;
+        InstructionRegister IR;
+        AddressRegister ADR;
+        MemoryDataRegister MDR;
+        Int16[] locations;
         public MemoryOperation memoryOperation;
+        public void SetIR(InstructionRegister IR)
+        {
+            this.IR = IR;
+        }
+
+        public void SetAddressRegister(AddressRegister ADR)
+        {
+            this.ADR = ADR;
+        }
+
+        public void SetMemoryDataRegister(MemoryDataRegister MDR)
+        {
+            this.MDR = MDR;
+        }
 
         public void READ()
         {
-            memoryDataRegister.Bits = locations[addressRegister.Bits];
+            MDR.Bits = locations[ADR.Bits];
         }
 
         public void WRITE()
         {
-            locations[addressRegister.Bits] = memoryDataRegister.Bits;
+            locations[ADR.Bits] = MDR.Bits;
+        }
+
+        public void IFCH()
+        {
+            READ();
+            MDR.PdMDR();
+            IR.PmIR();
         }
 
         public Memory()
         {
-            locations = new UInt16[65536];
+            locations = new Int16[65536];
             memoryOperation = MemoryOperation.READ;
         }
     }

@@ -8,7 +8,7 @@ namespace CISCSimulator.Classes.Simulator
 {
     class AddressRegister : Register
     {
-        public UInt16 Bits
+        public Int16 Bits
         {
             get
             {

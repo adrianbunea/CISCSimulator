@@ -4,18 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CISCSimulator.Classes.Simulator
+namespace CISCSimulator.Classes.Simulator.Registers
 {
-    class StackPointer : Register
+    class ProgramCounter : Register
     {
-        public void incSP()
+        public void incPC()
         {
             bits = bits++;
-        }
-
-        public void decSP()
-        {
-            bits = bits--;
         }
     }
 }

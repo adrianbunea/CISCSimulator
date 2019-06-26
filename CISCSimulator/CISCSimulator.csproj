@@ -86,6 +86,7 @@
     <Compile Include="Classes\Simulator\Processor.cs" />
     <Compile Include="Classes\Simulator\Registers\InterruptVectorRegister.cs" />
     <Compile Include="Classes\Simulator\Registers\MemoryDataRegister.cs" />
+    <Compile Include="Classes\Simulator\Registers\ProgramCounter.cs" />
     <Compile Include="Classes\Simulator\Registers\Register.cs" />
     <Compile Include="Classes\Simulator\Registers\StackPointer.cs" />
     <Compile Include="Classes\Simulator\Sequencer.cs" />

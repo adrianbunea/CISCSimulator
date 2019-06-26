@@ -34,7 +34,7 @@ namespace CISCSimulator.Classes.Simulator
         {
             get
             {
-                return (Int16)(bits & (int)FLAGS_Masks.V;
+                return (Int16)(bits & (int)FLAGS_Masks.V);
             }
 
             set
@@ -94,6 +94,62 @@ namespace CISCSimulator.Classes.Simulator
                     bits = (Int16)(bits & ~(1 << (int)FLAGS_SHIFTS.N));
                 }
             }
+        }
+
+        public void A1C()
+        {
+            C = 1;
+        }
+
+        public void A1V()
+        {
+            V = 1;
+        }
+
+        public void A1Z()
+        {
+            Z = 1;
+        }
+
+        public void A1S()
+        {
+            N = 1;
+        }
+
+        public void A0C()
+        {
+            C = 0;
+        }
+
+        public void A0V()
+        {
+            V = 0;
+        }
+
+        public void A0Z()
+        {
+            Z = 0;
+        }
+
+        public void A0S()
+        {
+            N = 0;
+        }
+
+        public void A1CVZS()
+        {
+            C = 1;
+            V = 1;
+            Z = 1;
+            N = 1;
+        }
+
+        public void A0CVZS()
+        {
+            C = 0;
+            V = 0;
+            Z = 0;
+            N = 0;
         }
     }
 }
