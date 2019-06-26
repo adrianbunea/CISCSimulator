@@ -9,13 +9,13 @@ namespace CISCSimulator.Classes.Simulator
     class GeneralRegisters
     {
         Bus DBUS;
-        InstructionRegister instructionRegister;
+        InstructionRegister IR;
 
         public Register SelectedRegister
         {
             get
             {
-                return RG[instructionRegister.Offset];
+                return RG[IR.Offset];
             }
         }
 
@@ -24,9 +24,9 @@ namespace CISCSimulator.Classes.Simulator
             this.DBUS = DBUS;
         }
 
-        public void SetInstructionRegister(InstructionRegister instructionRegister)
+        public void SetIR(InstructionRegister IR)
         {
-            this.instructionRegister = instructionRegister;
+            this.IR = IR;
         }
 
         Register[] RG;

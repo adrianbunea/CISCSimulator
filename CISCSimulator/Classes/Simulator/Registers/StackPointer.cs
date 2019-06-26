@@ -8,12 +8,12 @@ namespace CISCSimulator.Classes.Simulator
 {
     class StackPointer : Register
     {
-        public void incSP()
+        public void DncSP()
         {
             bits = bits++;
         }
 
-        public void decSP()
+        public void DecSP()
         {
             bits = bits--;
         }

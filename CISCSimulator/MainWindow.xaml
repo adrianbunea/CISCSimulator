@@ -17,6 +17,7 @@
             <MenuItem Header="Open File" Click="OpenFile"/>
             <MenuItem Header="Initialize Assembler" Click="InitializeAssembler"/>
             <MenuItem Header="Save Binary" Click="SaveBinary" IsEnabled="False" Name="saveBinaryMenuItem"/>
+            <MenuItem Header="Processor View" Click="ViewProcessor"/>
         </Menu>
 
         <Grid Grid.Row="1">

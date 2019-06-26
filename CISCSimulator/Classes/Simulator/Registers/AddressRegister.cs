@@ -19,22 +19,5 @@ namespace CISCSimulator.Classes.Simulator
                 bits = value;
             }
         }
-
-        Bus RBUS;
-
-        public void SetRBUS(Bus RBUS)
-        {
-            this.RBUS = RBUS;
-        }
-
-        public void PmADR()
-        {
-            bits = RBUS.bits;
-        }
-
-        public void PdADR()
-        {
-            RBUS.bits = bits;
-        }
     }
 }

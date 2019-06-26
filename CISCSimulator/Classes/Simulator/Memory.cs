@@ -25,12 +25,12 @@ namespace CISCSimulator.Classes.Simulator
             this.IR = IR;
         }
 
-        public void SetAddressRegister(AddressRegister ADR)
+        public void SetADR(AddressRegister ADR)
         {
             this.ADR = ADR;
         }
 
-        public void SetMemoryDataRegister(MemoryDataRegister MDR)
+        public void SetMDR(MemoryDataRegister MDR)
         {
             this.MDR = MDR;
         }

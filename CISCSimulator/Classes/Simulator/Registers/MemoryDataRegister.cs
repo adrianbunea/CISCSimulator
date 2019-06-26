@@ -30,10 +30,5 @@ namespace CISCSimulator.Classes.Simulator
         {
             RBUS.bits = bits;
         }
-
-        public void PmMDR()
-        {
-            bits = RBUS.bits;
-        }
     }
 }

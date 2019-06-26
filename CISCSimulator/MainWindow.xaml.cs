@@ -152,5 +152,11 @@ namespace CISCSimulator
                 }
             }
         }
+
+        private void ViewProcessor(object sender, RoutedEventArgs e)
+        {
+            ProcessorWindow processorWindow = new ProcessorWindow();
+            processorWindow.Show();
+        }
     }
 }
