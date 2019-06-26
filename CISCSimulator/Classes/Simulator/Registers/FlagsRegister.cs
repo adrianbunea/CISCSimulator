@@ -8,31 +8,92 @@ namespace CISCSimulator.Classes.Simulator
 {
     class FlagsRegister : Register
     {
-        Bus RBUS;
-        Bus DBUS;
-        public void SetRBUS(Bus RBUS)
+        public Int16 C
         {
-            this.RBUS = RBUS;
+            get
+            {
+                return (Int16)(bits & (int)FLAGS_Masks.C);
+            }
+
+            set
+            {
+                if (value == 1)
+                {
+                    bits = (Int16)(bits | 1 << (int)FLAGS_SHIFTS.C);
+                }
+                    
+
+                if (value == 0)
+                {
+                    bits = (Int16)(bits & ~(1 << (int)FLAGS_SHIFTS.C));
+                }
+            }
         }
 
-        public void SetDBUS(Bus DBUS)
+        public Int16 V
         {
-            this.DBUS = DBUS;
+            get
+            {
+                return (Int16)(bits & (int)FLAGS_Masks.V;
+            }
+
+            set
+            {
+                if (value == 1)
+                {
+                    bits = (Int16)(bits | 1 << (int)FLAGS_SHIFTS.V);
+                }
+
+
+                if (value == 0)
+                {
+                    bits = (Int16)(bits & ~(1 << (int)FLAGS_SHIFTS.V));
+                }
+            }
         }
 
-        public void PdFLAGS()
+        public Int16 Z
         {
-            DBUS.bits = bits;
+            get
+            {
+                return (Int16)(bits & (int)FLAGS_Masks.Z);
+            }
+
+            set
+            {
+                if (value == 1)
+                {
+                    bits = (Int16)(bits | 1 << (int)FLAGS_SHIFTS.Z);
+                }
+
+
+                if (value == 0)
+                {
+                    bits = (Int16)(bits & ~(1 << (int)FLAGS_SHIFTS.Z));
+                }
+            }
         }
 
-        public void PmFLAGS()
+        public Int16 N
         {
-            bits = RBUS.bits;
-        }
+            get
+            {
+                return (Int16)(bits & (int)FLAGS_Masks.N);
+            }
 
-        public FlagsRegister()
-        {
-            bits = 0;
+            set
+            {
+                if (value == 1)
+                {
+                    bits = (Int16)(bits | 1 << (int)FLAGS_SHIFTS.N);
+                }
+
+
+                if (value == 0)
+                {
+                    bits = (Int16)(bits & ~(1 << (int)FLAGS_SHIFTS.N));
+                }
+            }
         }
     }
 }

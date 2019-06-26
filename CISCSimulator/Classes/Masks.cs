@@ -12,6 +12,16 @@ namespace CISCSimulator
         BIT15 = 0x8000,
         BIT14 = 0x4000,
         BIT13 = 0x2000,
+        BIT0  = 0x0001,
         OFFSET = 0x00FF
+    }
+
+    [Flags]
+    public enum FLAGS_Masks : UInt16
+    {
+        C = 0x0001,
+        V = 0x0002,
+        Z = 0x0004,
+        N = 0x0008
     }
 }
